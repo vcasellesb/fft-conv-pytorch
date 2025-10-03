@@ -132,11 +132,9 @@ def fft_conv(
     output = irfftn(output_fr, dim=tuple(range(2, signal.ndim)))
 
     # Remove extra padded values
-    crop_slices = tuple(
-        [slice(None), slice(None)] + [
-            slice(0, (signal_size[i] - kernel.size(i) + 1), stride_[i - 2])
-            for i in range(2, signal.ndim)
-        ]
+    crop_slices = (slice(None), slice(None)) + tuple(
+        slice(0, (signal_size[i] - kernel.size(i) + 1), stride_[i - 2])
+        for i in range(2, signal.ndim)
     )
     output = output[crop_slices].contiguous()
 
